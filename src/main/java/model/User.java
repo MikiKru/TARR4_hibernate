@@ -23,4 +23,11 @@ public class User {
     private String userPassword;
     private LocalDateTime userRegistration = LocalDateTime.now();
     private boolean userStatus = true;
+
+    public User(String userName, String userLastName, String userEmail, String userPassword) {
+        this.userName = userName;
+        this.userLastName = userLastName;
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
+    }
 }
