@@ -134,4 +134,32 @@ public class HibernateController {
         transaction.commit();
         session.close();
     }
+    // ----------------
+    public User getUserById(int userId){
+        Session session = HibernateConfiguration.getSessionFactory().openSession();
+        Transaction transaction =session.beginTransaction();
+        Query query = session.createQuery("SELECT u FROM User u WHERE u.userId=:id");
+        query.setInteger("id", userId);
+        query.setMaxResults(1);
+        User user = (User) query.uniqueResult();
+        transaction.commit();
+        session.close();
+        return user;
+    }
+    public void updateUserPassword(int userId, String newPassword){
+        Session session = HibernateConfiguration.getSessionFactory().openSession();
+        Transaction transaction =session.beginTransaction();
+        User user = getUserById(userId);
+        user.setUserPassword(newPassword);
+        session.saveOrUpdate(user);
+        transaction.commit();
+        session.close();
+    }
+    public void deleteUserById(int userId){
+        Session session = HibernateConfiguration.getSessionFactory().openSession();
+        Transaction transaction =session.beginTransaction();
+        session.delete(getUserById(userId));
+        transaction.commit();
+        session.close();
+    }
 }
