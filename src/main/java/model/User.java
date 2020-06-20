@@ -42,6 +42,8 @@ public class User {
             name = "user_to_role")
     private Set<Role> roles = new HashSet<>();
 
+    // RELACJA ONE TO MANY (1:N) User to Post
+
     public User(String userName, String userLastName, String userEmail, String userPassword) {
         this.userName = userName;
         this.userLastName = userLastName;
