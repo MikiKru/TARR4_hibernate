@@ -5,7 +5,6 @@ import model.User;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import java.time.LocalDateTime;
 
 public class HibernateController {
     public void addUser(String name, String lastName, String email, String password){
