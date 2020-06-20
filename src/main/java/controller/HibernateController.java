@@ -7,6 +7,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.List;
+
 
 public class HibernateController {
     public void addUser(String name, String lastName, String email, String password){
@@ -35,6 +37,18 @@ public class HibernateController {
         Session session = HibernateConfiguration.getSessionFactory().openSession();
         Transaction transaction =session.beginTransaction();
         session.save(post);
+        transaction.commit();
+        session.close();
+    }
+    public void findUserPosts(User user){
+        Session session = HibernateConfiguration.getSessionFactory().openSession();
+        Transaction transaction =session.beginTransaction();
+        Query query = session.createQuery("SELECT p FROM Post p WHERE p.user=:user");
+        query.setParameter("user", user);
+        List<Post> userPosts = query.list();
+        userPosts.stream()
+                .forEach(post -> System.out.println(
+                        post.getPostId() + " " +post.getPostTitle()));
         transaction.commit();
         session.close();
     }

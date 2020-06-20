@@ -28,7 +28,7 @@ public class Main {
                 }
             } else {
                 System.out.println("Co chcesz zrobić?");
-                System.out.println("1. Dodaj posta \n2. Zmień tutuł post \n3. Usuń posta \nQ. Wyjdź");
+                System.out.println("1. Dodaj posta \n2. Zmień tutuł posta \n3. Usuń posta \nQ. Wyjdź");
                 String decision = scanner.nextLine();
                 if (decision.equals("1")) {
                     System.out.println("Podaj tytuł: ");
@@ -42,7 +42,8 @@ public class Main {
                     Post post = new Post(title, content, categoryEnum, dateTime, user);
                     hc.addPost(post);
                 } else if (decision.equals("2")) {
-
+                    System.out.println("Podaj id posta któremu chcesz zmienić tytuł");
+                    hc.findUserPosts(user);
                 } else if (decision.equals("3")){
 
                 } else if (decision.toUpperCase().equals("Q")){
