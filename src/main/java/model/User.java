@@ -3,10 +3,12 @@ package model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data                   // dodaje gettery, settery i toString
 @AllArgsConstructor
@@ -16,13 +18,19 @@ import java.time.LocalDateTime;
 public class User {
     @Id                 // dodaje klauzule PRIMARY KEY do userId
     @GeneratedValue(strategy = GenerationType.IDENTITY)     // dodaje klauzulę a_i do userId
+    @Column(name = "user_id")
     private int userId;
+    @Column(name = "user_name")
     private String userName;
     @Column(name = "user_lastname")                         // mapuje pole o nazwie określonej w name
     private String userLastName;
+    @Column(name = "user_email")
     private String userEmail;
+    @Column(name = "user_password")
     private String userPassword;
-    private LocalDateTime userRegistration = LocalDateTime.now();
+    @Column(name = "user_registration")
+    private Date userRegistration = new Date();
+    @Column(name = "user_status")
     private boolean userStatus = true;
 
     public User(String userName, String userLastName, String userEmail, String userPassword) {
