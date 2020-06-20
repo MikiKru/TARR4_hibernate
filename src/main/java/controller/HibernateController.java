@@ -52,4 +52,25 @@ public class HibernateController {
         transaction.commit();
         session.close();
     }
+    public Post findUserPostById(int postId, User user){
+        Session session = HibernateConfiguration.getSessionFactory().openSession();
+        Transaction transaction =session.beginTransaction();
+        Query query = session.createQuery("SELECT p FROM Post p WHERE p.user=:user AND p.postId=:id");
+        query.setParameter("user", user);
+        query.setInteger("id", postId);
+        query.setMaxResults(1);
+        Post post = (Post) query.uniqueResult();
+        transaction.commit();
+        session.close();
+        return post;
+    }
+    public void updatePostTitle(Post oldPost, String newTitle){
+        Session session = HibernateConfiguration.getSessionFactory().openSession();
+        Transaction transaction =session.beginTransaction();
+        oldPost.setPostTitle(newTitle);
+        session.saveOrUpdate(oldPost);      // UPDATE
+        transaction.commit();
+        session.close();
+    }
+
 }

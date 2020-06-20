@@ -7,6 +7,7 @@ import org.hibernate.Session;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -42,8 +43,19 @@ public class Main {
                     Post post = new Post(title, content, categoryEnum, dateTime, user);
                     hc.addPost(post);
                 } else if (decision.equals("2")) {
-                    System.out.println("Podaj id posta któremu chcesz zmienić tytuł");
                     hc.findUserPosts(user);
+                    System.out.println("Podaj id posta któremu chcesz zmienić tytuł");
+                    try {
+                        int postId = scanner.nextInt();
+                        scanner.nextLine();
+                        Post oldPost = hc.findUserPostById(postId, user);
+                        System.out.println("Podaj nowy tytuł posta");
+                        String newTitle = scanner.nextLine();
+                        hc.updatePostTitle(oldPost, newTitle);
+                    }catch (InputMismatchException ex){
+                        System.out.println("Błędna wartość id");
+                        scanner.nextLine();
+                    }
                 } else if (decision.equals("3")){
 
                 } else if (decision.toUpperCase().equals("Q")){
