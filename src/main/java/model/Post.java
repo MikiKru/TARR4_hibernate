@@ -26,6 +26,8 @@ public class Post {
     @Column(name = "post_registaration")
     private Date postRegistration = new Date();
     // RELACJA MANY TO ONE (N:1) Post to User
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
 
 }

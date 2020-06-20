@@ -20,6 +20,7 @@
         <!-- mapowanie encji na tabela i tabel na encje -->
         <mapping class="model.User"/>
         <mapping class="model.Role"/>
+        <mapping class="model.Post"/>
     </session-factory>
 </hibernate-configuration>
 

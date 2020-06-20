@@ -8,9 +8,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Data                   // dodaje gettery, settery i toString
 @AllArgsConstructor
@@ -43,6 +41,12 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     // RELACJA ONE TO MANY (1:N) User to Post
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "user"
+    )
+    private List<Post> posts = new ArrayList<>();
 
     public User(String userName, String userLastName, String userEmail, String userPassword) {
         this.userName = userName;
