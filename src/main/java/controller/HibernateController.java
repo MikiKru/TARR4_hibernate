@@ -27,7 +27,7 @@ public class HibernateController {
         session.close();
         return role;
     }
-    public void addUser(String name, String lastName, String email, String password) throws NoSuchAlgorithmException {
+    public void addUser(String name, String lastName, String email, String password, RoleEnum roleEnum) throws NoSuchAlgorithmException {
         // otwarcie sesji
         Session session = HibernateConfiguration.getSessionFactory().openSession();
         // rozpoczęcie transakcji
@@ -37,7 +37,7 @@ public class HibernateController {
         User user = new User(name,lastName,email, String.valueOf(encodedPassword));
         // przypisanie roli do użytkownika
         Set<Role> roles = user.getRoles();
-        roles.add(findRoleByName(RoleEnum.ROLE_USER));
+        roles.add(findRoleByName(roleEnum));
         user.setRoles(roles);
         session.save(user);
         transaction.commit();
