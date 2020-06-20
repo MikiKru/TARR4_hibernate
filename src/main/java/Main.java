@@ -92,9 +92,25 @@ public class Main {
                         hc.addUser(name, lastname, email, password, RoleEnum.ROLE_ADMIN);
                     }
                 } else if (decision.equals("A3") && user.getRoles().contains(hc.findRoleByName(RoleEnum.ROLE_ADMIN))){
-
+                    try {
+                        System.out.println("Podaj id użytkownika, któremu chcesz zmienić hasło");
+                        int userId = scanner.nextInt();
+                        scanner.nextLine();
+                        System.out.println("Podaj nowe hasło");
+                        String password = scanner.nextLine();
+                        hc.updateUserPassword(userId, password);
+                    } catch (InputMismatchException ex){
+                        System.out.println("Błędna wartość id");
+                        scanner.nextLine();
+                    }
                 } else if (decision.equals("A4") && user.getRoles().contains(hc.findRoleByName(RoleEnum.ROLE_ADMIN))){
-
+                    try {
+                        System.out.println("Podaj id użytkownika, któremu chcesz zmienić hasło");
+                        int userId = scanner.nextInt();
+                        hc.deleteUserById(userId);
+                    } catch (InputMismatchException ex){
+                        System.out.println("Błędna wartość id");
+                    }
                 } else if (decision.toUpperCase().equals("Q")){
                     break;
                 } else {

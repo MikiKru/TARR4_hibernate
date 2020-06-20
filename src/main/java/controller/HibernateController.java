@@ -146,11 +146,13 @@ public class HibernateController {
         session.close();
         return user;
     }
-    public void updateUserPassword(int userId, String newPassword){
+    public void updateUserPassword(int userId, String newPassword) throws NoSuchAlgorithmException {
         Session session = HibernateConfiguration.getSessionFactory().openSession();
         Transaction transaction =session.beginTransaction();
         User user = getUserById(userId);
-        user.setUserPassword(newPassword);
+        MessageDigest messageDigest = MessageDigest.getInstance("MD5"); // algorytm do szyfrowania
+        byte [] encodedPassword = messageDigest.digest(newPassword.getBytes());
+        user.setUserPassword(bytesToHex(encodedPassword));
         session.saveOrUpdate(user);
         transaction.commit();
         session.close();
