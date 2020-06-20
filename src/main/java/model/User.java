@@ -9,6 +9,8 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data                   // dodaje gettery, settery i toString
 @AllArgsConstructor
@@ -33,7 +35,12 @@ public class User {
     @Column(name = "user_status")
     private boolean userStatus = true;
     // RELACJA MANY TO MANY (N:M) User to Role
-
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"),
+            name = "user_to_role")
+    private Set<Role> roles = new HashSet<>();
 
     public User(String userName, String userLastName, String userEmail, String userPassword) {
         this.userName = userName;
