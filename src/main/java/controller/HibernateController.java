@@ -2,6 +2,8 @@ package controller;
 
 import config.HibernateConfiguration;
 import model.Post;
+import model.Role;
+import model.RoleEnum;
 import model.User;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -10,9 +12,21 @@ import org.hibernate.Transaction;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Set;
 
 
 public class HibernateController {
+    public Role findRoleByName(RoleEnum roleEnum){
+        Session session = HibernateConfiguration.getSessionFactory().openSession();
+        Transaction transaction =session.beginTransaction();
+        Query query = session.createQuery("SELECT r FROM Role r WHERE r.roleName=:roleName");
+        query.setParameter("roleName", roleEnum);
+        query.setMaxResults(1);
+        Role role = (Role) query.uniqueResult();
+        transaction.commit();
+        session.close();
+        return role;
+    }
     public void addUser(String name, String lastName, String email, String password) throws NoSuchAlgorithmException {
         // otwarcie sesji
         Session session = HibernateConfiguration.getSessionFactory().openSession();
@@ -20,7 +34,12 @@ public class HibernateController {
         Transaction transaction =session.beginTransaction();
         MessageDigest messageDigest = MessageDigest.getInstance("MD5"); // algorytm do szyfrowania
         byte [] encodedPassword = messageDigest.digest(password.getBytes());
-        session.save(new User(name,lastName,email, String.valueOf(encodedPassword)));
+        User user = new User(name,lastName,email, String.valueOf(encodedPassword));
+        // przypisanie roli do użytkownika
+        Set<Role> roles = user.getRoles();
+        roles.add(findRoleByName(RoleEnum.ROLE_USER));
+        user.setRoles(roles);
+        session.save(user);
         transaction.commit();
         session.close();
     }
