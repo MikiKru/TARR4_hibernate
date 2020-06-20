@@ -32,6 +32,8 @@ public class User {
     private Date userRegistration = new Date();
     @Column(name = "user_status")
     private boolean userStatus = true;
+    // RELACJA MANY TO MANY (N:M) User to Role
+
 
     public User(String userName, String userLastName, String userEmail, String userPassword) {
         this.userName = userName;

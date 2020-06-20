@@ -19,6 +19,7 @@
         <property name="hibernate.hbm2ddl.auto">update</property>
         <!-- mapowanie encji na tabela i tabel na encje -->
         <mapping class="model.User"/>
+        <mapping class="model.Role"/>
     </session-factory>
 </hibernate-configuration>
 
