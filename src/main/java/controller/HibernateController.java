@@ -11,8 +11,11 @@ import org.hibernate.Transaction;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 public class HibernateController {
@@ -27,6 +30,15 @@ public class HibernateController {
         session.close();
         return role;
     }
+    private static String bytesToHex(byte[] hash) {
+        StringBuffer hexString = new StringBuffer();
+        for (int i = 0; i < hash.length; i++) {
+            String hex = Integer.toHexString(0xff & hash[i]);
+            if(hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
     public void addUser(String name, String lastName, String email, String password, RoleEnum roleEnum) throws NoSuchAlgorithmException {
         // otwarcie sesji
         Session session = HibernateConfiguration.getSessionFactory().openSession();
@@ -34,7 +46,7 @@ public class HibernateController {
         Transaction transaction =session.beginTransaction();
         MessageDigest messageDigest = MessageDigest.getInstance("MD5"); // algorytm do szyfrowania
         byte [] encodedPassword = messageDigest.digest(password.getBytes());
-        User user = new User(name,lastName,email, String.valueOf(encodedPassword));
+        User user = new User(name,lastName,email, bytesToHex(encodedPassword));
         // przypisanie roli do użytkownika
         Set<Role> roles = user.getRoles();
         roles.add(findRoleByName(roleEnum));
@@ -43,13 +55,15 @@ public class HibernateController {
         transaction.commit();
         session.close();
     }
-    public User loginUser(String login, String password){
+    public User loginUser(String login, String password) throws NoSuchAlgorithmException {
         Session session = HibernateConfiguration.getSessionFactory().openSession();
         Transaction transaction =session.beginTransaction();
+        MessageDigest messageDigest = MessageDigest.getInstance("MD5"); // algorytm do szyfrowania
+        byte [] encodedPassword = messageDigest.digest(password.getBytes());
         Query query = session.createQuery(
                 "SELECT u FROM User u WHERE u.userEmail=:login AND u.userPassword=:password");
         query.setString("login", login);
-        query.setString("password", password);
+        query.setString("password", bytesToHex(encodedPassword));
         query.setMaxResults(1);
         User user = (User) query.uniqueResult();
         transaction.commit();
