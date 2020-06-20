@@ -30,4 +30,11 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public Post(String postTitle, String postContent, CategoryEnum postCategory, Date postRegistration, User user) {
+        this.postTitle = postTitle;
+        this.postContent = postContent;
+        this.postCategory = postCategory;
+        this.postRegistration = postRegistration;
+        this.user = user;
+    }
 }
