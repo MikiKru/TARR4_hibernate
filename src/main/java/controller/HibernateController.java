@@ -72,5 +72,29 @@ public class HibernateController {
         transaction.commit();
         session.close();
     }
+    public void deleteUserPostById(int postId, User user){
+        Post postToDelete = findUserPostById(postId, user);
+        Session session = HibernateConfiguration.getSessionFactory().openSession();
+        Transaction transaction =session.beginTransaction();
+        session.delete(postToDelete);
+        transaction.commit();
+        session.close();
+    }
+    public void printAllPosts(){
+        Session session = HibernateConfiguration.getSessionFactory().openSession();
+        Transaction transaction =session.beginTransaction();
 
+        Query query = session.createQuery("SELECT p FROM Post p");
+        List<Post> userPosts = query.list();
+        userPosts.stream()
+                .forEach(post -> System.out.printf(
+                        "| %2d | %20s | %20s | %20s | %15s |\n",
+                        post.getPostId(),
+                        post.getPostTitle(),
+                        post.getUser().getUserName() + " " + post.getUser().getUserLastName(),
+                        post.getPostCategory(),
+                        post.getPostRegistration()));
+        transaction.commit();
+        session.close();
+    }
 }

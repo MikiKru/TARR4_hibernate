@@ -28,6 +28,7 @@ public class Main {
                     isLogged = true;
                 }
             } else {
+                hc.printAllPosts();
                 System.out.println("Co chcesz zrobić?");
                 System.out.println("1. Dodaj posta \n2. Zmień tutuł posta \n3. Usuń posta \nQ. Wyjdź");
                 String decision = scanner.nextLine();
@@ -57,7 +58,15 @@ public class Main {
                         scanner.nextLine();
                     }
                 } else if (decision.equals("3")){
-
+                    hc.findUserPosts(user);
+                    System.out.println("Podaj id posta do usunięcia");
+                    try {
+                        int postId = scanner.nextInt();
+                        hc.deleteUserPostById(postId, user);
+                    } catch (InputMismatchException ex){
+                        System.out.println("Błędny wartość id");
+                        scanner.nextLine();
+                    }
                 } else if (decision.toUpperCase().equals("Q")){
                     break;
                 } else {
@@ -66,8 +75,5 @@ public class Main {
             }
 
         }
-
-
-//        hc.addUser("test1", "test1", "test1@test.pl", "test1");
     }
 }
