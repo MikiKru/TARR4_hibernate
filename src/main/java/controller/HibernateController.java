@@ -7,16 +7,20 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 
 public class HibernateController {
-    public void addUser(String name, String lastName, String email, String password){
+    public void addUser(String name, String lastName, String email, String password) throws NoSuchAlgorithmException {
         // otwarcie sesji
         Session session = HibernateConfiguration.getSessionFactory().openSession();
         // rozpoczęcie transakcji
         Transaction transaction =session.beginTransaction();
-        session.save(new User(name,lastName,email,password));
+        MessageDigest messageDigest = MessageDigest.getInstance("MD5"); // algorytm do szyfrowania
+        byte [] encodedPassword = messageDigest.digest(password.getBytes());
+        session.save(new User(name,lastName,email, String.valueOf(encodedPassword)));
         transaction.commit();
         session.close();
     }
